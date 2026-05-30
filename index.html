@@ -1,0 +1,420 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  #app {
+    min-height: 600px;
+    background: #0a0a0f;
+    color: #e8e0d0;
+    font-family: 'Crimson Text', serif;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stars {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 70%, rgba(255,255,255,0.25) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 60%, rgba(255,255,255,0.15) 0%, transparent 100%),
+      radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 65% 20%, rgba(255,255,255,0.18) 0%, transparent 100%),
+      radial-gradient(1px 1px at 35% 50%, rgba(255,255,255,0.22) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 85%, rgba(255,255,255,0.12) 0%, transparent 100%);
+    background-size: 400px 400px;
+  }
+
+  .inner { position: relative; z-index: 1; padding: 2.5rem 2rem; }
+
+  .site-title {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: #8a7a5a;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .puzzle-screen { display: none; }
+  .puzzle-screen.active { display: block; }
+
+  .puzzle-num {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: #6a5a3a;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .puzzle-title {
+    font-family: 'Cinzel', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #c8a96e;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+  }
+
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 1.25rem 0;
+  }
+  .divider-line { flex: 1; height: 0.5px; background: #3a3020; }
+  .divider-diamond {
+    width: 6px; height: 6px;
+    background: #8a6a2a;
+    transform: rotate(45deg);
+  }
+
+  .hint-box {
+    border: 0.5px solid #3a3020;
+    border-left: 2px solid #8a6a2a;
+    padding: 1rem 1.25rem;
+    background: rgba(138,106,42,0.06);
+    border-radius: 0 6px 6px 0;
+    font-size: 16px;
+    line-height: 1.7;
+    color: #b8a888;
+    margin-bottom: 1.5rem;
+  }
+
+  .input-row {
+    display: flex; gap: 10px; align-items: stretch;
+    margin-bottom: 0.75rem;
+  }
+
+  .pass-input {
+    flex: 1;
+    background: #0f0f18;
+    border: 0.5px solid #3a3020;
+    border-radius: 6px;
+    color: #e8e0d0;
+    font-family: 'Crimson Text', serif;
+    font-size: 17px;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .pass-input:focus { border-color: #8a6a2a; }
+  .pass-input.error { border-color: #8a3a2a; animation: shake 0.3s ease; }
+  .pass-input.success { border-color: #3a8a5a; }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  .submit-btn {
+    background: #8a6a2a;
+    border: none;
+    border-radius: 6px;
+    color: #f0e8d0;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    white-space: nowrap;
+  }
+  .submit-btn:hover { background: #a07a38; }
+  .submit-btn:active { transform: scale(0.97); }
+  .submit-btn:disabled { background: #3a3020; color: #6a5a3a; cursor: not-allowed; }
+
+  .status-msg {
+    font-size: 14px;
+    min-height: 20px;
+    text-align: center;
+    transition: opacity 0.3s;
+  }
+  .status-msg.err { color: #c86a5a; }
+  .status-msg.ok { color: #5ab87a; }
+  .status-msg.loading { color: #8a6a2a; }
+
+  .progress-bar-wrap {
+    margin: 1.5rem 0 0.5rem;
+    height: 2px;
+    background: #1a1a28;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #8a6a2a, #c8a96e);
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+  .progress-label {
+    font-size: 12px;
+    color: #6a5a3a;
+    text-align: right;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.1em;
+  }
+
+  .victory-screen {
+    display: none;
+    text-align: center;
+    padding: 2rem 0;
+  }
+  .victory-screen.active { display: block; }
+
+  .victory-glyph {
+    font-size: 48px;
+    margin-bottom: 1rem;
+    color: #c8a96e;
+    font-family: 'Cinzel', serif;
+  }
+
+  .victory-title {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    color: #c8a96e;
+    margin-bottom: 0.75rem;
+  }
+
+  .victory-sub {
+    color: #8a7a5a;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+  }
+
+  .nav-dots {
+    display: flex; gap: 6px; justify-content: center; flex: 1;
+  }
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #2a2018;
+    transition: background 0.3s;
+  }
+  .nav-dot.done { background: #8a6a2a; }
+  .nav-dot.current { background: #c8a96e; }
+
+  .session-note {
+    font-size: 12px;
+    color: #4a4030;
+    text-align: center;
+    margin-top: 1.25rem;
+    letter-spacing: 0.05em;
+  }
+</style>
+
+<div id="app">
+  <div class="stars"></div>
+  <div class="inner">
+    <div class="site-title">The Gauntlet</div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+    <div class="progress-label" id="prog-label">0 / 10</div>
+
+    <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+
+    <div id="puzzles-container"></div>
+
+    <div class="victory-screen" id="victory">
+      <div class="victory-glyph">✦</div>
+      <div class="victory-title">All seals broken.</div>
+      <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+      <div class="victory-sub">You have walked the full path of the Gauntlet.<br>The archive is yours.</div>
+    </div>
+
+    <div class="nav-row">
+      <div class="nav-dots" id="nav-dots"></div>
+    </div>
+
+    <div class="session-note" id="session-note"></div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = "https://adqnhmmgrrptiljuvnwv.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkcW5obW1ncnJwdGlsanV2bnd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MDIzNzMsImV4cCI6MjA4OTM3ODM3M30.k_pxMDRvOtBasUgqk-THJmY3GoJ0Ppgdg5ZhK2pQ4UE";
+
+const PUZZLES = [
+  { id: 1, title: "The Tome's Truth", hint: "Navarrian scientists say the cure to Venin could be found within the siphon signet. The true cure, however, may be referenced in the 27th line of the tome itself." },
+  { id: 2, title: "Glimpses of Tomorrow", hint: "The passphrase waits where glimpses of tomorrow are displayed." },
+  { id: 3, title: "The Villain's Identity", hint: "\"You either die a hero, or you live long enough to see yourself become the villain\" — once the closing lines of a story. The one who shares a real identity with this character holds the code... find it through them. Do not use the Honor Site." },
+  { id: 4, title: "Like Coins", hint: "You already have the hint to this riddle. Refer to your previous response and simply... continue. Do not start your answer with a space." },
+  { id: 5, title: "Invested Arts", hint: "Many of the Invested Arts naturally have the ability to detect [ ] built into them." },
+  { id: 6, title: "The Gauntlet's Secret", hint: "This, the biggest clue held by generations, was held in the Gauntlet, hidden in Ireland." },
+  { id: 7, title: "Top of the Charts", hint: "What was Evan's 2025 top Spotify song? (Lmao)" },
+  { id: 8, title: "The Origin", hint: "The origin. 2023-10-27 3:35 PM — This response is case sensitive." },
+  { id: 9, title: "Did You See That?", hint: "Challenge me, challenge this, but did you see that?" },
+  { id: 10, title: "Ghost Chains", hint: "The sound of the ghost drags... but with this, the effect is eerie." }
+];
+
+function getSessionId() {
+  let sid = localStorage.getItem('gauntlet_session');
+  if (!sid) {
+    sid = 'sess_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    localStorage.setItem('gauntlet_session', sid);
+  }
+  return sid;
+}
+
+let sessionId = getSessionId();
+let currentPuzzle = 1;
+let completedPuzzles = [];
+
+async function fetchProgress() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/puzzle_progress?session_id=eq.${encodeURIComponent(sessionId)}&select=current_puzzle,completed_puzzles`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data[0]) {
+        currentPuzzle = data[0].current_puzzle || 1;
+        completedPuzzles = data[0].completed_puzzles || [];
+      }
+    }
+  } catch(e) {}
+}
+
+async function checkPassword(puzzleId, attempt) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/check_puzzle_password`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY
+    },
+    body: JSON.stringify({ p_puzzle_id: puzzleId, p_attempt: attempt, p_session_id: sessionId })
+  });
+  if (!res.ok) throw new Error('Network error');
+  return await res.json();
+}
+
+function buildPuzzles() {
+  const container = document.getElementById('puzzles-container');
+  container.innerHTML = '';
+  PUZZLES.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'puzzle-screen' + (p.id === currentPuzzle ? ' active' : '');
+    div.id = 'puzzle-' + p.id;
+    div.innerHTML = `
+      <div class="puzzle-num">Seal ${p.id} of 10</div>
+      <div class="puzzle-title">${p.title}</div>
+      <div class="hint-box">${p.hint}</div>
+      <div class="input-row">
+        <input class="pass-input" type="text" id="inp-${p.id}" placeholder="Enter the passphrase..." autocomplete="off" spellcheck="false" />
+        <button class="submit-btn" id="btn-${p.id}" onclick="submitPuzzle(${p.id})">Unlock</button>
+      </div>
+      <div class="status-msg" id="status-${p.id}"></div>
+    `;
+    container.appendChild(div);
+
+    const inp = div.querySelector(`#inp-${p.id}`);
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') submitPuzzle(p.id); });
+  });
+}
+
+function buildDots() {
+  const dotsEl = document.getElementById('nav-dots');
+  dotsEl.innerHTML = '';
+  for (let i = 1; i <= 10; i++) {
+    const d = document.createElement('div');
+    d.className = 'nav-dot' + (completedPuzzles.includes(i) ? ' done' : '') + (i === currentPuzzle && currentPuzzle <= 10 ? ' current' : '');
+    dotsEl.appendChild(d);
+  }
+}
+
+function updateProgress() {
+  const done = completedPuzzles.length;
+  const pct = (done / 10) * 100;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = done + ' / 10';
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.puzzle-screen').forEach(el => el.classList.remove('active'));
+  const target = document.getElementById('puzzle-' + id);
+  if (target) target.classList.add('active');
+  document.getElementById('victory').classList.remove('active');
+}
+
+function showVictory() {
+  document.querySelectorAll('.puzzle-screen').forEach(el => el.classList.remove('active'));
+  document.getElementById('victory').classList.add('active');
+}
+
+async function submitPuzzle(puzzleId) {
+  const inp = document.getElementById('inp-' + puzzleId);
+  const btn = document.getElementById('btn-' + puzzleId);
+  const status = document.getElementById('status-' + puzzleId);
+  const attempt = inp.value;
+  if (!attempt.trim()) return;
+
+  btn.disabled = true;
+  inp.classList.remove('error', 'success');
+  status.className = 'status-msg loading';
+  status.textContent = 'Checking...';
+
+  try {
+    const result = await checkPassword(puzzleId, attempt);
+    if (result && result.success) {
+      inp.classList.add('success');
+      status.className = 'status-msg ok';
+      status.textContent = result.completed ? '✦ All seals broken.' : '✦ Seal broken. Advancing...';
+      if (!completedPuzzles.includes(puzzleId)) completedPuzzles.push(puzzleId);
+      currentPuzzle = result.next_puzzle;
+      updateProgress();
+      buildDots();
+      setTimeout(() => {
+        if (result.completed || currentPuzzle > 10) {
+          showVictory();
+        } else {
+          showScreen(currentPuzzle);
+          const nextInp = document.getElementById('inp-' + currentPuzzle);
+          if (nextInp) nextInp.focus();
+        }
+        btn.disabled = false;
+      }, 900);
+    } else {
+      inp.classList.add('error');
+      status.className = 'status-msg err';
+      status.textContent = 'Incorrect. The seal holds.';
+      btn.disabled = false;
+      setTimeout(() => inp.classList.remove('error'), 500);
+    }
+  } catch(e) {
+    status.className = 'status-msg err';
+    status.textContent = 'Connection lost. Try again.';
+    btn.disabled = false;
+  }
+}
+
+async function init() {
+  document.getElementById('session-note').textContent = 'Session: ' + sessionId.slice(0, 16) + '...';
+  await fetchProgress();
+  buildPuzzles();
+  buildDots();
+  updateProgress();
+  if (currentPuzzle > 10 || completedPuzzles.length >= 10) {
+    showVictory();
+  } else {
+    showScreen(currentPuzzle);
+    const inp = document.getElementById('inp-' + currentPuzzle);
+    if (inp) inp.focus();
+  }
+}
+
+init();
+</script>
