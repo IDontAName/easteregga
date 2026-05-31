@@ -3,199 +3,400 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Evan's Random Ass Puzzle #1</title>
+<title>Puzzle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;width:100%}
-body{background:#0a0a0f}
-#app{min-height:100vh;width:100%;background:#0a0a0f;color:#e8e0d0;font-family:'Crimson Text',serif;position:relative}
-.stars{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(1px 1px at 20% 30%,rgba(255,255,255,0.3) 0%,transparent 100%),radial-gradient(1px 1px at 80% 10%,rgba(255,255,255,0.2) 0%,transparent 100%),radial-gradient(1px 1px at 50% 70%,rgba(255,255,255,0.25) 0%,transparent 100%),radial-gradient(1px 1px at 90% 60%,rgba(255,255,255,0.15) 0%,transparent 100%),radial-gradient(1px 1px at 10% 80%,rgba(255,255,255,0.2) 0%,transparent 100%),radial-gradient(1px 1px at 65% 20%,rgba(255,255,255,0.18) 0%,transparent 100%),radial-gradient(1px 1px at 35% 50%,rgba(255,255,255,0.22) 0%,transparent 100%),radial-gradient(1px 1px at 75% 85%,rgba(255,255,255,0.12) 0%,transparent 100%);background-size:400px 400px}
-.wrap{position:relative;z-index:1;padding:clamp(1.25rem,4vw,2.5rem) clamp(1rem,4vw,2rem);width:100%;max-width:860px;margin:0 auto}
-.site-title{font-family:'Cinzel',serif;font-size:clamp(9px,1.5vw,11px);letter-spacing:0.4em;text-transform:uppercase;color:#8a7a5a;text-align:center;margin-bottom:0.5rem}
-.puzzle-screen{display:none;width:100%}
-.puzzle-screen.active{display:block}
-.puzzle-num{font-family:'Cinzel',serif;font-size:clamp(9px,1.5vw,10px);letter-spacing:0.35em;color:#6a5a3a;text-align:center;margin-bottom:0.75rem}
-.puzzle-title{font-family:'Cinzel',serif;font-size:clamp(17px,3.5vw,24px);font-weight:700;color:#c8a96e;text-align:center;margin-bottom:1.25rem;line-height:1.3}
-.divider{display:flex;align-items:center;gap:12px;margin:1rem 0}
-.divider-line{flex:1;height:0.5px;background:#3a3020}
-.divider-diamond{width:6px;height:6px;flex-shrink:0;background:#8a6a2a;transform:rotate(45deg)}
-.hint-box{border:0.5px solid #3a3020;border-left:2px solid #8a6a2a;border-radius:0 6px 6px 0;padding:clamp(0.75rem,2vw,1rem) clamp(0.9rem,2vw,1.25rem);background:rgba(138,106,42,0.06);font-size:clamp(15px,2.2vw,17px);line-height:1.7;color:#b8a888;margin-bottom:1.25rem}
-.input-row{display:flex;gap:8px;align-items:stretch;margin-bottom:0.75rem;width:100%}
-.pass-input{flex:1;min-width:0;background:#0f0f18;border:0.5px solid #3a3020;border-radius:6px;color:#e8e0d0;font-family:'Crimson Text',serif;font-size:clamp(15px,2vw,17px);padding:10px 14px;outline:none;transition:border-color 0.2s}
+html,body{height:100%;width:100%;background:#0a0a0f}
+#app{min-height:100vh;width:100%;background:#0a0a0f;color:#e8e0d0;font-family:'Crimson Text',serif}
+
+/* STARS */
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(1px 1px at 15% 25%,rgba(255,255,255,0.25) 0%,transparent 100%),radial-gradient(1px 1px at 80% 10%,rgba(255,255,255,0.2) 0%,transparent 100%),radial-gradient(1px 1px at 50% 70%,rgba(255,255,255,0.2) 0%,transparent 100%),radial-gradient(1px 1px at 90% 55%,rgba(255,255,255,0.15) 0%,transparent 100%),radial-gradient(1px 1px at 10% 80%,rgba(255,255,255,0.18) 0%,transparent 100%),radial-gradient(1px 1px at 65% 20%,rgba(255,255,255,0.15) 0%,transparent 100%),radial-gradient(1px 1px at 35% 50%,rgba(255,255,255,0.2) 0%,transparent 100%),radial-gradient(1px 1px at 75% 85%,rgba(255,255,255,0.12) 0%,transparent 100%);background-size:500px 500px}
+
+/* NAME SCREEN */
+#name-screen{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
+.name-box{width:100%;max-width:480px;text-align:center}
+.name-title{font-family:'Cinzel',serif;font-size:clamp(20px,4vw,30px);color:#c8a96e;margin-bottom:0.5rem;letter-spacing:0.05em}
+.name-sub{font-size:16px;color:#8a7a5a;margin-bottom:2rem}
+.name-input{width:100%;background:#0f0f18;border:0.5px solid #3a3020;border-radius:6px;color:#e8e0d0;font-family:'Crimson Text',serif;font-size:18px;padding:12px 16px;outline:none;text-align:center;transition:border-color 0.2s;margin-bottom:1rem}
+.name-input:focus{border-color:#8a6a2a}
+.name-btn{background:#8a6a2a;border:none;border-radius:6px;color:#f0e8d0;font-family:'Cinzel',serif;font-size:13px;letter-spacing:0.2em;padding:12px 32px;cursor:pointer;transition:background 0.2s;width:100%}
+.name-btn:hover{background:#a07a38}
+
+/* MAIN SCREEN */
+#main-screen{display:none;position:relative;z-index:1;min-height:100vh;padding:clamp(1rem,3vw,2rem) clamp(1rem,3vw,2rem)}
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.5rem}
+.top-greeting{font-family:'Cinzel',serif;font-size:clamp(9px,1.5vw,11px);letter-spacing:0.3em;color:#8a7a5a;text-transform:uppercase}
+.top-progress{font-family:'Cinzel',serif;font-size:clamp(9px,1.5vw,11px);letter-spacing:0.2em;color:#6a5a3a}
+.progress-bar-wrap{height:2px;background:#1a1a28;border-radius:2px;overflow:hidden;margin-bottom:1.5rem}
+.progress-bar-fill{height:100%;background:#8a6a2a;border-radius:2px;transition:width 0.6s ease}
+
+/* PUZZLE GRID */
+.puzzle-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:12px;margin-bottom:2rem}
+
+/* PUZZLE CARD */
+.puzzle-card{border:0.5px solid #2a2018;border-radius:8px;background:#0d0d16;overflow:hidden;transition:border-color 0.2s}
+.puzzle-card:hover{border-color:#4a3a20}
+.puzzle-card.solved{border-color:#3a5a3a}
+.puzzle-card.locked{border-color:#1a1a2a;opacity:0.6}
+.card-header{padding:0.9rem 1rem;cursor:pointer;display:flex;align-items:center;gap:10px;user-select:none}
+.card-num{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:#6a5a3a;min-width:90px}
+.card-status-dot{width:7px;height:7px;border-radius:50%;background:#2a2018;flex-shrink:0;margin-left:auto;transition:background 0.3s}
+.puzzle-card.solved .card-status-dot{background:#4a8a5a}
+.puzzle-card.locked .card-status-dot{background:#2a2a4a}
+.card-solved-by{font-size:12px;color:#4a8a5a;font-family:'Cinzel',serif;letter-spacing:0.05em;padding:0 1rem 0.75rem;font-style:italic}
+.card-body{border-top:0.5px solid #1e1a10;padding:1rem;display:none}
+.card-body.open{display:block}
+.card-hint{font-size:clamp(14px,2vw,16px);line-height:1.75;color:#b8a888;margin-bottom:1rem;white-space:pre-wrap}
+.answer-type{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:#6a5a3a;margin-bottom:0.75rem;text-transform:uppercase}
+.answer-revealed{font-size:15px;color:#4a8a5a;font-style:italic;padding:10px 14px;background:rgba(74,138,90,0.08);border-radius:6px;border:0.5px solid #3a5a3a}
+.input-row{display:flex;gap:8px}
+.pass-input{flex:1;min-width:0;background:#0a0a12;border:0.5px solid #3a3020;border-radius:6px;color:#e8e0d0;font-family:'Crimson Text',serif;font-size:16px;padding:9px 13px;outline:none;transition:border-color 0.2s}
 .pass-input:focus{border-color:#8a6a2a}
 .pass-input.error{border-color:#8a3a2a;animation:shake 0.3s ease}
-.pass-input.success{border-color:#3a8a5a}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-.submit-btn{background:#8a6a2a;border:none;border-radius:6px;color:#f0e8d0;font-family:'Cinzel',serif;font-size:clamp(10px,1.5vw,12px);letter-spacing:0.15em;padding:10px clamp(12px,2vw,20px);cursor:pointer;transition:background 0.2s,transform 0.1s;white-space:nowrap;flex-shrink:0}
+.pass-input.ok{border-color:#3a8a5a}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.submit-btn{background:#8a6a2a;border:none;border-radius:6px;color:#f0e8d0;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.15em;padding:9px 16px;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background 0.2s}
 .submit-btn:hover{background:#a07a38}
-.submit-btn:active{transform:scale(0.97)}
-.submit-btn:disabled{background:#3a3020;color:#6a5a3a;cursor:not-allowed}
-.status-msg{font-size:clamp(13px,1.8vw,14px);min-height:20px;text-align:center;transition:opacity 0.3s}
-.status-msg.err{color:#c86a5a}
-.status-msg.ok{color:#5ab87a}
-.status-msg.loading{color:#8a6a2a}
-.progress-bar-wrap{margin:1.25rem 0 0.4rem;height:2px;background:#1a1a28;border-radius:2px;overflow:hidden}
-.progress-bar-fill{height:100%;background:#8a6a2a;border-radius:2px;transition:width 0.6s ease}
-.progress-label{font-size:clamp(10px,1.5vw,12px);color:#6a5a3a;text-align:right;font-family:'Cinzel',serif;letter-spacing:0.1em}
-.victory-screen{display:none;text-align:center;padding:2rem 0}
-.victory-screen.active{display:block}
-.victory-glyph{font-size:clamp(32px,6vw,48px);margin-bottom:1rem;color:#c8a96e;font-family:'Cinzel',serif}
-.victory-title{font-family:'Cinzel',serif;font-size:clamp(16px,3vw,22px);color:#c8a96e;margin-bottom:0.75rem}
-.victory-sub{color:#8a7a5a;font-size:clamp(14px,2vw,16px);line-height:1.7}
-.nav-row{display:flex;justify-content:center;align-items:center;margin-top:1.5rem}
-.nav-dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
-.nav-dot{width:6px;height:6px;border-radius:50%;background:#2a2018;transition:background 0.3s;flex-shrink:0}
-.nav-dot.done{background:#8a6a2a}
-.nav-dot.current{background:#c8a96e}
-.session-note{font-size:clamp(10px,1.5vw,12px);color:#4a4030;text-align:center;margin-top:1.25rem;letter-spacing:0.05em;word-break:break-all}
+.submit-btn:disabled{background:#2a2018;color:#6a5a3a;cursor:not-allowed}
+.card-status-msg{font-size:13px;min-height:18px;margin-top:0.6rem;text-align:center}
+.card-status-msg.err{color:#c86a5a}
+.card-status-msg.ok{color:#5ab87a}
+.card-status-msg.loading{color:#8a6a2a}
+
+/* LOCK CARD */
+.lock-notice{text-align:center;padding:1rem;color:#4a4a6a;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em}
+.lock-icon{font-size:20px;margin-bottom:0.5rem;opacity:0.4}
+
+.divider{display:flex;align-items:center;gap:12px;margin:1rem 0}
+.divider-line{flex:1;height:0.5px;background:#2a2018}
+.divider-diamond{width:5px;height:5px;flex-shrink:0;background:#6a5a2a;transform:rotate(45deg)}
 </style>
 </head>
 <body>
 <div id="app">
   <div class="stars"></div>
-  <div class="wrap">
 
-    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-fill" style="width:0%"></div></div>
-    <div class="progress-label" id="prog-label">0 / 10</div>
-    <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
-    <div id="puzzles-container"></div>
-    <div class="victory-screen" id="victory">
-      <div class="victory-glyph">✦</div>
-      <div class="victory-title">All puzzles solved.</div>
-      <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
-      <div class="victory-sub">You have walked the full path.<br>The archive is yours.</div>
+  <!-- NAME ENTRY -->
+  <div id="name-screen">
+    <div class="name-box">
+      <div class="name-title">Enter Your Name</div>
+      <div class="name-sub">Your name will appear when you solve a puzzle.</div>
+      <input class="name-input" id="name-input" type="text" placeholder="Your name..." autocomplete="off" maxlength="40"/>
+      <button class="name-btn" id="name-btn">Begin</button>
     </div>
-    <div class="nav-row"><div class="nav-dots" id="nav-dots"></div></div>
-    <div class="session-note" id="session-note"></div>
+  </div>
+
+  <!-- MAIN PUZZLE SCREEN -->
+  <div id="main-screen">
+    <div class="top-bar">
+      <div class="top-greeting" id="top-greeting"></div>
+      <div class="top-progress" id="top-progress">0 / 16 solved</div>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-fill" style="width:0%"></div></div>
+    <div class="puzzle-grid" id="puzzle-grid"></div>
   </div>
 </div>
 
 <script>
-const SUPABASE_URL="https://adqnhmmgrrptiljuvnwv.supabase.co";
-const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkcW5obW1ncnJwdGlsanV2bnd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MDIzNzMsImV4cCI6MjA4OTM3ODM3M30.k_pxMDRvOtBasUgqk-THJmY3GoJ0Ppgdg5ZhK2pQ4UE";
+const SUPABASE_URL = "https://adqnhmmgrrptiljuvnwv.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkcW5obW1ncnJwdGlsanV2bnd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MDIzNzMsImV4cCI6MjA4OTM3ODM3M30.k_pxMDRvOtBasUgqk-THJmY3GoJ0Ppgdg5ZhK2pQ4UE";
 
-const PUZZLES=[
-  {id:1,  title:"The Cure?",              hint:"Navarrian scientists say that <em>the cure</em> to Venin could be found within the siphon signet. However, I digress. The true cure may be referenced in the 27th line of the tome itself."},
-  {id:2,  title:"Glimpses of Tomorrow",   hint:"The passphrase waits where glimpses of tomorrow are displayed."},
-  {id:3,  title:"The Villain's Identity", hint:"&ldquo;You either die a hero, or live long enough to see yourself become the villian&rdquo; were once the closing lines of my story, but the story of my enforcer counterpart is very different. His true identity shares it&rsquo;s last with the name of whose face will lead you on. HINT: DO NOT use the Honor Site for this"},
-  {id:4,  title:"Like Coins",             hint:"You already have the hint to this riddle... Refer to your previous response and simply... continue (do not start your answer with a space)"},
-  {id:5,  title:"Invested Arts",          hint:"Many of the Invested Arts naturally have the ability to detect [] built into them."},
-  {id:6,  title:"The Gauntlet's Secret",  hint:"This, the biggest clue held by generations, was held in the Gauntlet, hidden in Ireland. #31st"},
-  {id:7,  title:"Top of the Charts",      hint:"What was Evan's 2025 top Spotify song? (Lmao)"},
-  {id:8,  title:"The Origin",             hint:"The origin. 2023-10-27 3:35 PM This response is case sensitive"},
-  {id:9,  title:"Lust",      hint:"The second word of Munsch's greatest work combined with the 3rd of the combined efforts of Myers and Jackson (which just released!). Combine the words into a phrase, beloved in culture, terrifying in practice."},
-  {id:10, title:"Love?",           hint:"Love among the lowest emerged through the Paper Girls of Girls of Paper and Fire (amazing book, btw). Find the final solution within one such reference. HINT: Think of the FMCs."}
+const PUZZLES = [
+  {
+    id: 1,
+    hint: `This film, though difficult to spot while watching, has 3 shots reusing the exact same frame, albeit with the background swapped or shot reversed. It is also the film in which the main character vanishes from the screen at 1:25:17.`,
+    type: "Series / Character name"
+  },
+  {
+    id: 2,
+    hint: `The emerald eye at it's origin, stories of chocolate at it's nexus, I have a living snare as a cousin though youngsters shout my name.\nThis answer is the name of a book (series)`,
+    type: "Series / Character name"
+  },
+  {
+    id: 3,
+    hint: `Mr. Mullen may sing "Ice, Ice, Baby" (my fucking god), but I prefer Ice Up!`,
+    type: "Character"
+  },
+  {
+    id: 4,
+    hint: `Though I am hated by many, I am loved by the ones who support *girls*.\nAnd even after all my attempts to fix my way,\nI was overruled, by the father of one who tells me\nThat "I miss you, I'm sorry"\n[Fun Fact: Due to that unnamed director, I had to film my final lines of rewrites in my closet!]\n\nHint from your friendly neighborhood DM: The first line refers to a TV Show while the next 3 refer to a film.`,
+    type: "Name, Actor"
+  },
+  {
+    id: 5,
+    hint: `Not many are offered a second life,\nThough for Wade, a quarter from this is all it takes,\nBut for you my friend,\nThe answer can be found,\nIn the 16th passage.\n\nHint: Parzival may be a big shot, but maybe think further...\nMaybe... a small-town boy?`,
+    type: "Sentence"
+  },
+  {
+    id: 6,
+    hint: `I speak of a master of illusions,\nOf a broken soul,\nOf a creature curled up in their shell.\n\nI speak of sins,\nand I speak of rot,\nWhat am I, a venter for your sins?\n\nHint: Last line exists to sound nice (Ignore it).`,
+    type: "Song"
+  },
+  {
+    id: 7,
+    hint: `Five? What's next, 6, 7?\n(Karma not impressed)`,
+    type: "Character"
+  },
+  {
+    id: 8,
+    hint: `Though they share our planet's name,\nThey do not bow before any as they remain-Perched upon moonstone,\nSat, high up upon the morning throne.\n-7th Century PCE`,
+    type: "Character"
+  },
+  {
+    id: 9,
+    hint: `Had the fuhrer succeeded, he would have only mimicked a *fraction* of my fabled German spider-web, weaving together a true state. (Dirty Austrian).\n(Absolute aura)`,
+    type: "Historical Figure"
+  },
+  {
+    id: 10,
+    hint: `An arrogant mother,\nOf otherworldly prowess,\nIs the same,\nAs,\nA man of true steel,\nA failed Theologian, (how tf do you fail that)\nA masked man with a pistol in a heist.\n\nHint: The first 3 phrases refer to one person, the second another. Both people share the same name.`,
+    type: "Person"
+  },
+  {
+    id: 11,
+    hint: `Though Selena Hale may have sacrificed,\nOne who shares her name loses more.\nHer parents, sparks of Hatred perhaps never to be found,\nHer friends, Grey never to be recovered.\n\nBut who is the greatest of them all, the one she cannot lose?`,
+    type: "Character (no type label)"
+  },
+  {
+    id: 12,
+    hint: `Though the Enchantress of ancient tales attempts to harm us,\nThough the Grande Armee decides to find us,\nThough the man under the scary mask decides to hunt us,\nWe prevail, an author's odyssey behind us.`,
+    type: "The name of two characters who share a last name, in format [Name1, Name2] (with the comma) (eldest first)"
+  },
+  {
+    id: 13,
+    hint: `Though the Alroy may share my name,\nThey will never share my pain.\nDaughter, Heir, Princess, Queen,\nThey will never match the Kejari, unseen.`,
+    type: "Character (Full name required)"
+  },
+  {
+    id: 14,
+    hint: `Though striking gray may meet piercing blue,\nI can never endorse reading you.\nThrough the ages and through the pain,\nA red queen reigns above all aims.`,
+    type: "Series name"
+  },
+  {
+    id: 15,
+    hint: `Though the world cannot easily be summoned,\nClara may try, as she may be destined.\nThough Kaelis may attempt to fool her fortunes,\nShe knows who he is, and will not be denied her portion.`,
+    type: "Book name"
+  },
+  {
+    id: 16,
+    hint: `Oh to be the sacred number of the universe\nWhat a shame, what a shame.\nBecause you are not.`,
+    type: "?"
+  }
 ];
 
-function getSessionId(){
-  let sid=localStorage.getItem('gauntlet_session');
-  if(!sid){sid='sess_'+Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('gauntlet_session',sid);}
+function getSessionId() {
+  let sid = localStorage.getItem('puzzle_session_v2');
+  if (!sid) { sid = 'sess_' + Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('puzzle_session_v2', sid); }
   return sid;
 }
 
-let sessionId=getSessionId(),currentPuzzle=1,completedPuzzles=[];
+function getPlayerName() { return localStorage.getItem('puzzle_name_v2') || ''; }
+function setPlayerName(n) { localStorage.setItem('puzzle_name_v2', n); }
 
-async function fetchProgress(){
-  try{
-    const res=await fetch(`${SUPABASE_URL}/rest/v1/puzzle_progress?session_id=eq.${encodeURIComponent(sessionId)}&select=current_puzzle,completed_puzzles`,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}});
-    if(res.ok){const d=await res.json();if(d&&d[0]){currentPuzzle=d[0].current_puzzle||1;completedPuzzles=d[0].completed_puzzles||[];}}
-  }catch(e){}
+const sessionId = getSessionId();
+let playerName = getPlayerName();
+let puzzleStates = {}; // id -> {solved_by_name, solved_at} or null
+let openCards = new Set();
+
+async function headers() {
+  return { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' };
 }
 
-async function checkPassword(pid,attempt){
-  const res=await fetch(`${SUPABASE_URL}/rest/v1/rpc/check_puzzle_password`,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY},body:JSON.stringify({p_puzzle_id:pid,p_attempt:attempt,p_session_id:sessionId})});
-  if(!res.ok)throw new Error('Network error');
-  return await res.json();
+async function fetchStates() {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/puzzle_status?select=id,solved_by_name,solved_at`, { headers: await headers() });
+  const rows = await res.json();
+  const newStates = {};
+  rows.forEach(r => { newStates[r.id] = r.solved_by_name ? { name: r.solved_by_name, at: r.solved_at } : null; });
+  return newStates;
 }
 
-function buildPuzzles(){
-  const c=document.getElementById('puzzles-container');
-  c.innerHTML='';
-  PUZZLES.forEach(p=>{
-    const div=document.createElement('div');
-    div.className='puzzle-screen'+(p.id===currentPuzzle?' active':'');
-    div.id='puzzle-'+p.id;
-    div.innerHTML=`<div class="puzzle-num">Puzzle ${p.id} of 10</div><div class="puzzle-title">${p.title}</div><div class="hint-box">${p.hint}</div><div class="input-row"><input class="pass-input" type="text" id="inp-${p.id}" placeholder="Enter the passphrase..." autocomplete="off" spellcheck="false"/><button class="submit-btn" id="btn-${p.id}" onclick="submitPuzzle(${p.id})">Unlock</button></div><div class="status-msg" id="status-${p.id}"></div>`;
-    c.appendChild(div);
-    div.querySelector(`#inp-${p.id}`).addEventListener('keydown',e=>{if(e.key==='Enter')submitPuzzle(p.id);});
+async function registerPlayer() {
+  await fetch(`${SUPABASE_URL}/rest/v1/players`, {
+    method: 'POST',
+    headers: { ...await headers(), 'Prefer': 'resolution=ignore-duplicates' },
+    body: JSON.stringify({ session_id: sessionId, name: playerName })
   });
 }
 
-function buildDots(){
-  const el=document.getElementById('nav-dots');
-  el.innerHTML='';
-  for(let i=1;i<=10;i++){
-    const d=document.createElement('div');
-    d.className='nav-dot'+(completedPuzzles.includes(i)?' done':'')+(i===currentPuzzle&&currentPuzzle<=10?' current':'');
-    el.appendChild(d);
-  }
+async function submitAnswer(puzzleId, attempt) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/check_puzzle_answer`, {
+    method: 'POST',
+    headers: await headers(),
+    body: JSON.stringify({ p_puzzle_id: puzzleId, p_attempt: attempt, p_session_id: sessionId, p_player_name: playerName })
+  });
+  return await res.json();
 }
 
-function updateProgress(){
-  const done=completedPuzzles.length;
-  document.getElementById('prog-fill').style.width=(done/10*100)+'%';
-  document.getElementById('prog-label').textContent=done+' / 10';
+function countSolved(states) {
+  return Object.values(states).filter(v => v !== null).length;
 }
 
-function showScreen(id){
-  document.querySelectorAll('.puzzle-screen').forEach(el=>el.classList.remove('active'));
-  const t=document.getElementById('puzzle-'+id);
-  if(t)t.classList.add('active');
-  document.getElementById('victory').classList.remove('active');
+function allOthersSolved(states) {
+  for (let i = 1; i <= 15; i++) { if (!states[i]) return false; }
+  return true;
 }
 
-function showVictory(){
-  document.querySelectorAll('.puzzle-screen').forEach(el=>el.classList.remove('active'));
-  document.getElementById('victory').classList.add('active');
+function ordinal(n) {
+  const s = ['th','st','nd','rd'], v = n % 100;
+  return n + (s[(v-20)%10] || s[v] || s[0]);
 }
 
-async function submitPuzzle(pid){
-  const inp=document.getElementById('inp-'+pid);
-  const btn=document.getElementById('btn-'+pid);
-  const status=document.getElementById('status-'+pid);
-  const attempt=inp.value;
-  if(!attempt.trim())return;
-  btn.disabled=true;
-  inp.classList.remove('error','success');
-  status.className='status-msg loading';
-  status.textContent='Checking...';
-  try{
-    const result=await checkPassword(pid,attempt);
-    if(result&&result.success){
-      inp.classList.add('success');
-      status.className='status-msg ok';
-      status.textContent=result.completed?'✦ All puzzles solved.':'✦ Correct. Advancing...';
-      if(!completedPuzzles.includes(pid))completedPuzzles.push(pid);
-      currentPuzzle=result.next_puzzle;
-      updateProgress();buildDots();
-      setTimeout(()=>{
-        if(result.completed||currentPuzzle>10)showVictory();
-        else{showScreen(currentPuzzle);const ni=document.getElementById('inp-'+currentPuzzle);if(ni)ni.focus();}
-        btn.disabled=false;
-      },900);
-    }else{
-      inp.classList.add('error');
-      status.className='status-msg err';
-      status.textContent='Incorrect. Try again.';
-      btn.disabled=false;
-      setTimeout(()=>inp.classList.remove('error'),500);
+function renderGrid(states) {
+  const grid = document.getElementById('puzzle-grid');
+  const solved = countSolved(states);
+  document.getElementById('top-progress').textContent = solved + ' / 16 solved';
+  document.getElementById('prog-fill').style.width = (solved / 16 * 100) + '%';
+
+  // Re-render each card if it exists, or build fresh
+  PUZZLES.forEach(p => {
+    let card = document.getElementById('card-' + p.id);
+    const state = states[p.id];
+    const isLocked = p.id === 16 && !allOthersSolved(states);
+    const isSolved = !!state;
+    const isOpen = openCards.has(p.id);
+
+    if (!card) {
+      card = document.createElement('div');
+      card.id = 'card-' + p.id;
+      grid.appendChild(card);
     }
-  }catch(e){
-    status.className='status-msg err';
-    status.textContent='Connection lost. Try again.';
-    btn.disabled=false;
+
+    card.className = 'puzzle-card' + (isSolved ? ' solved' : '') + (isLocked ? ' locked' : '');
+
+    let bodyHTML = '';
+    if (isLocked) {
+      bodyHTML = `
+        <div class="card-body${isOpen ? ' open' : ''}">
+          <div class="lock-notice"><div class="lock-icon">🔒</div>Solve all other puzzles to unlock.</div>
+        </div>`;
+    } else if (isSolved) {
+      bodyHTML = `
+        <div class="card-body${isOpen ? ' open' : ''}">
+          <div class="answer-type">Answer Type: ${p.type}</div>
+          <div class="card-hint">${p.hint}</div>
+          <div class="answer-revealed">✓ ${state.name}</div>
+        </div>`;
+    } else {
+      bodyHTML = `
+        <div class="card-body${isOpen ? ' open' : ''}" id="body-${p.id}">
+          <div class="answer-type">Answer Type: ${p.type}</div>
+          <div class="card-hint">${p.hint}</div>
+          <div class="input-row">
+            <input class="pass-input" id="inp-${p.id}" type="text" placeholder="Your answer..." autocomplete="off" spellcheck="false"/>
+            <button class="submit-btn" id="btn-${p.id}" onclick="doSubmit(${p.id})">Submit</button>
+          </div>
+          <div class="card-status-msg" id="msg-${p.id}"></div>
+        </div>`;
+    }
+
+    card.innerHTML = `
+      <div class="card-header" onclick="toggleCard(${p.id})">
+        <div class="card-num">${ordinal(p.id)} Puzzle</div>
+        <div class="card-status-dot"></div>
+      </div>
+      ${isSolved ? `<div class="card-solved-by">Solved by ${state.name}</div>` : ''}
+      ${bodyHTML}`;
+
+    if (!isSolved && !isLocked) {
+      const inp = document.getElementById('inp-' + p.id);
+      if (inp) inp.addEventListener('keydown', e => { if (e.key === 'Enter') doSubmit(p.id); });
+    }
+  });
+}
+
+function toggleCard(id) {
+  if (openCards.has(id)) openCards.delete(id);
+  else openCards.add(id);
+  const body = document.getElementById('card-' + id)?.querySelector('.card-body');
+  if (body) body.classList.toggle('open', openCards.has(id));
+}
+
+async function doSubmit(puzzleId) {
+  const inp = document.getElementById('inp-' + puzzleId);
+  const btn = document.getElementById('btn-' + puzzleId);
+  const msg = document.getElementById('msg-' + puzzleId);
+  const attempt = inp.value.trim();
+  if (!attempt) return;
+  btn.disabled = true;
+  inp.classList.remove('error', 'ok');
+  msg.className = 'card-status-msg loading';
+  msg.textContent = 'Checking...';
+  try {
+    const result = await submitAnswer(puzzleId, attempt);
+    if (result && result.success) {
+      inp.classList.add('ok');
+      msg.className = 'card-status-msg ok';
+      msg.textContent = '✦ Correct!';
+      await refreshStates();
+    } else {
+      inp.classList.add('error');
+      msg.className = 'card-status-msg err';
+      msg.textContent = (result && result.message) || 'Incorrect.';
+      setTimeout(() => inp.classList.remove('error'), 500);
+      btn.disabled = false;
+    }
+  } catch(e) {
+    msg.className = 'card-status-msg err';
+    msg.textContent = 'Connection error. Try again.';
+    btn.disabled = false;
   }
 }
 
-async function init(){
-  document.getElementById('session-note').textContent='Session: '+sessionId.slice(0,16)+'...';
-  await fetchProgress();
-  buildPuzzles();buildDots();updateProgress();
-  if(currentPuzzle>10||completedPuzzles.length>=10)showVictory();
-  else{showScreen(currentPuzzle);const inp=document.getElementById('inp-'+currentPuzzle);if(inp)inp.focus();}
+async function refreshStates() {
+  const newStates = await fetchStates();
+  puzzleStates = newStates;
+  renderGrid(puzzleStates);
+}
+
+function startPolling() {
+  setInterval(async () => {
+    const newStates = await fetchStates();
+    // Only re-render if something changed
+    const changed = PUZZLES.some(p => {
+      const was = puzzleStates[p.id];
+      const now = newStates[p.id];
+      return (!!was) !== (!!now) || (was && now && was.name !== now.name);
+    });
+    if (changed) {
+      puzzleStates = newStates;
+      renderGrid(puzzleStates);
+    }
+  }, 5000);
+}
+
+// NAME SCREEN LOGIC
+document.getElementById('name-btn').addEventListener('click', beginSession);
+document.getElementById('name-input').addEventListener('keydown', e => { if (e.key === 'Enter') beginSession(); });
+
+async function beginSession() {
+  const val = document.getElementById('name-input').value.trim();
+  if (!val) return;
+  setPlayerName(val);
+  playerName = val;
+  await registerPlayer();
+  document.getElementById('name-screen').style.display = 'none';
+  document.getElementById('main-screen').style.display = 'block';
+  document.getElementById('top-greeting').textContent = playerName;
+  puzzleStates = await fetchStates();
+  renderGrid(puzzleStates);
+  startPolling();
+}
+
+async function init() {
+  if (playerName) {
+    document.getElementById('name-screen').style.display = 'none';
+    document.getElementById('main-screen').style.display = 'block';
+    document.getElementById('top-greeting').textContent = playerName;
+    await registerPlayer();
+    puzzleStates = await fetchStates();
+    renderGrid(puzzleStates);
+    startPolling();
+  } else {
+    document.getElementById('name-input').focus();
+  }
 }
 
 init();
